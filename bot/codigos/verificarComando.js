@@ -14,19 +14,48 @@ export async function verificarComando(c, mensagem) {
             return;
         }
 
-        const comando = textoMensagem.split(" ")[0];
+        // Regex para identificar menções com o formato @ID@s.whatsapp.net
+        const regexMençãoID = /@(\d{10,15})@s\.whatsapp\.net/g;  // Regex para capturar @id@s.whatsapp.net
+        const idsMenções = textoMensagem.match(regexMençãoID);
 
-        const comandosPermitidos = ["adv", "ban", "regras", "aviso"];
+        // Se houver menção de ID, podemos realizar ações específicas
+        if (idsMenções) {
+            // IDs que são permitidos ou específicos, aqui você pode adicionar os IDs que você quiser
+            const adminIds = ["557192567840@s.whatsapp.net", "outroID@s.whatsapp.net"];  // IDs de administradores
 
-        // Ignora comandos que começam com @ ou @@
-        if (comando.startsWith('@') || comando.startsWith('@@')) {
-            await c.sendMessage(mensagem.key.remoteJid, {
-                text: `⚠️ Comando *${comando}* não aceito no grupo. Não insista! ❌`
-            });
-            return;
+            for (let id of idsMenções) {
+                if (adminIds.includes(id)) {
+                    await c.sendMessage(mensagem.key.remoteJid, {
+                        text: `⚠️ Não é permitido mencionar administradores com o ID: ${id}.`
+                    });
+                    return;
+                }
+            }
         }
 
-        // Nova regex: apenas letras após o caractere especial
+        // Verificar uso de @ ou @@ seguido de palavras não válidas (não menções e números)
+        const regexArroba = /@{1,2}([a-zA-Záàãâéèêíìóòõôúùç]+)/g;  // Detecta @palavra ou @@palavra
+        const palavrasComArroba = textoMensagem.match(regexArroba);
+
+        if (palavrasComArroba) {
+            for (let palavra of palavrasComArroba) {
+                const palavraSemArroba = palavra.slice(1); // Remove o @ ou @@
+                
+                // Se não for uma menção válida ou número
+                if (!palavraSemArroba.match(/^[0-9]{10,15}$/)) {  // Não é um número válido de telefone
+                    await c.sendMessage(mensagem.key.remoteJid, {
+                        text: `⚠️ Comando *${palavra}* não permitido. Não insista! ❌`
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Comandos permitidos
+        const comando = textoMensagem.split(" ")[0];
+        const comandosPermitidos = ["adv", "ban", "regras", "aviso"];
+
+        // Processa comando
         const regexComando = /^[#.$&*!%]+([a-zA-Z]+)/;
         const match = comando.match(regexComando);
 
