@@ -229,7 +229,8 @@ export const blacklist = [
     '559691946972@s.whatsapp.net',
     '557391099556@s.whatsapp.net',
     '557391099801@s.whatsapp.net',
-    '557999592230@s.whatsapp.net'
+    '557999592230@s.whatsapp.net',
+    '556484448232@s.whatsapp.net'
 ];
 
 const BATCH_SIZE = 500; // Tamanho de cada lote para processamento da blacklist
