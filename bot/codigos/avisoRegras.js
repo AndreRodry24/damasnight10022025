@@ -40,7 +40,7 @@ export const aviso = async (c, mensagem) => {
                 mensagemAviso += `👏🍻 *DﾑMﾑS* 💃🔥 *Dﾑ* *NIGӇԵ*💃🎶🍾🍸\n\n`;
                 mensagemAviso += `🚫 Não é permitido o envio de *imagens de nudez* sem a visualização única. 👎 \n\n`;
                 mensagemAviso += `⚠️ Não são permitidos assuntos relacionados a *política* 🗳️, *futebol* ⚽ ou *religião* ⛪, para evitar conflitos desnecessários. \n\n`;
-                mensagemAviso += `🚸 Não é permitido compartilhar *fotos de crianças* 👶 *com conotação sexual* ❌ ou marcar *fotos íntimas* com *figuras de crianças* 🔞. \n\n`;
+                mensagemAviso += `🚸 Não é permitido compartilhar *fotos, figurinhas ou imagens de crianças* 👶❌ nem marcar *fotos íntimas* com *imagens de crianças* 🔞. \n\n`;
                 mensagemAviso += `⚠️ *Proibido generalizar e falar mal dos membros do grupo* soltando indiretas ou discussões sobre assuntos privados. 💬💢 Qualquer assunto pessoal deve ser resolvido no privado! 🤝💬` ;
             } else {
                 mensagemAviso += `${idsUsuarios.map(id => `@${id.split('@')[0]}`).join(', ')}`;
@@ -48,7 +48,7 @@ export const aviso = async (c, mensagem) => {
                 mensagemAviso += `👏🍻 *DﾑMﾑS* 💃🔥 *Dﾑ* *NIGӇԵ*💃🎶🍾🍸\n\n`;
                 mensagemAviso += `🚫 Não é permitido o envio de *imagens de nudez* sem a visualização única. 👎 \n\n`;
                 mensagemAviso += `⚠️ Não são permitidos assuntos relacionados a *política* 🗳️, *futebol* ⚽ ou *religião* ⛪, para evitar conflitos desnecessários. \n\n`;
-                mensagemAviso += `🚸 Não é permitido compartilhar *fotos de crianças* 👶 *com conotação sexual* ❌ ou marcar *fotos íntimas* com *figuras de crianças* 🔞. \n\n`;
+                mensagemAviso += `🚸 Não é permitido compartilhar *fotos, figurinhas ou imagens de crianças* 👶❌ nem marcar *fotos íntimas* com *imagens de crianças* 🔞. \n\n`;
                 mensagemAviso += `⚠️ *Proibido generalizar e falar mal dos membros do grupo* soltando indiretas ou discussões sobre assuntos privados. 💬💢 Qualquer assunto pessoal deve ser resolvido no privado! 🤝💬` ;
             }
 
@@ -76,12 +76,11 @@ export const aviso = async (c, mensagem) => {
             }
         } else if (textoMensagem && textoMensagem.endsWith('#aviso')) {
             await c.sendMessage(chatId, {
-                text: `@${sender.split('@')[0]}, você *NÃO tem permissão* para executar esse comando 🚫👨🏻‍✈️ *Ele é EXCLUSIVO dos administradores* do grupo 👏🍻 *DﾑMﾑS* 💃🔥 *Dﾑ NIGӇԵ* 💃🎶🍾🍸`,
+                text: `@${sender.split('@')[0]}, você *NÃO TEM PERMISSÃO* para usar este comando.`,
                 mentions: [sender],
             });
         }
-    } catch (error) {
-        console.error('Erro ao aplicar o aviso:', error);
-        console.log('Detalhes da mensagem:', mensagem);
+    } catch (err) {
+        console.log('Erro ao enviar aviso:', err);
     }
 };

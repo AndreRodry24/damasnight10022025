@@ -1,4 +1,5 @@
 import { makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
+import { removerCaracteres } from './bot/codigos/removerCaracteres.js';
 import { blacklist, banUser, notifyUserRemoved, handleMessage } from './bot/codigos/blacklist.js';
 import { configurarBoasVindas } from './bot/codigos/boasVindas.js';
 import configurarBloqueio from './bot/codigos/bloquearUsuarios.js';
@@ -10,6 +11,7 @@ import { handleGroupParticipantsUpdate } from './bot/codigos/avisoadm.js';
 import { handleBanMessage } from './bot/codigos/banUsuario.js';
 import { mencionarTodos } from './bot/codigos/enviarRegras.js';
 import { aviso } from './bot/codigos/avisoRegras.js';
+import { verificarComando } from './bot/codigos/verificarComando.js'; // Certifique-se de que a função está importada corretamente
 
 async function connectToWhatsApp() {
     const { version } = await fetchLatestBaileysVersion();
@@ -43,6 +45,9 @@ async function connectToWhatsApp() {
             const content = message.message?.conversation || '';
             const from = message.key.remoteJid;
 
+            // Chama a função para remover caracteres proibidos
+            await removerCaracteres(sock, message);
+
             // Gerenciar mensagens com #ban
             await handleBanMessage(sock, message);
 
@@ -65,6 +70,10 @@ async function connectToWhatsApp() {
 
             // Chama a função de aviso, caso a mensagem contenha #aviso
             await aviso(sock, message);
+
+            // Verificar comando
+            await verificarComando(sock, message);  // Aqui estamos chamando a função para verificar o comando
+            console.log("Comando verificado.");
 
         } catch (err) {
             console.error("Erro ao processar mensagens:", err);
