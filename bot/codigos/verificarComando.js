@@ -8,9 +8,23 @@ export async function verificarComando(c, mensagem) {
 
         if (!textoMensagem) return;
 
+        // Ignora mensagens com asterisco no início e no fim
+        if ((textoMensagem.startsWith("*") && textoMensagem.endsWith("*")) ||
+            (textoMensagem.match(/^[\p{Emoji}\u200B]/u) && textoMensagem.match(/[\p{Emoji}\u200B]$/u))) {
+            return;
+        }
+
         const comando = textoMensagem.split(" ")[0];
 
-        const comandosPermitidos = ["adv", "ban", "regras", "aviso", "nlink"];
+        const comandosPermitidos = ["adv", "ban", "regras", "aviso"];
+
+        // Ignora comandos que começam com @ ou @@
+        if (comando.startsWith('@') || comando.startsWith('@@')) {
+            await c.sendMessage(mensagem.key.remoteJid, {
+                text: `⚠️ Comando *${comando}* não aceito no grupo. Não insista! ❌`
+            });
+            return;
+        }
 
         // Nova regex: apenas letras após o caractere especial
         const regexComando = /^[#.$&*!%]+([a-zA-Z]+)/;
